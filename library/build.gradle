@@ -4,6 +4,10 @@ plugins {
     id 'maven-publish'
 }
 
+def getVersionName = { ->
+    return getCurrentTime()
+}
+
 android {
     compileSdk 31
 
@@ -21,27 +25,36 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
+}
+
+static def getCurrentTime() {
+    return new Date().format("yyyyMMddHHmm", TimeZone.getTimeZone("GMT+08:00"))
+}
+
+static def getGitShortSHA() {
+    return 'git rev-parse --short HEAD'.execute().text.trim()
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-                groupId = 'org.comingchat.android'
-                artifactId = 'wallet-sdk'
-                version = '1.0.0'
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = 'org.comingchat.android'
+            artifactId = 'wallet-sdk'
+            version getVersionName()
+            artifact("libs/wallet.aar")
+        }
+    }
+
+    repositories {
+        maven {
+            // config repo and user info
+            url "https://maven.pkg.github.com/imtianx/wallet-sdk-android"
+            credentials {
+                username = System.getenv("GPR_USER") ?: project.findProperty("gpr.user")
+                password = System.getenv("GPR_API_KEY") ?: project.findProperty("gpr.key")
             }
         }
     }

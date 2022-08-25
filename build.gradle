@@ -1,4 +1,22 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        maven {
+            url = uri("https://maven.pkg.github.com/imtianx/wallet-sdk-android")
+            Properties properties = new Properties()
+            properties.load(project.rootProject.file('local.properties').newDataInputStream())
+            def userName = properties.getProperty("gpr.user")
+            def userKey = properties.getProperty("gpr.key")
+            ext.GITHUB_USER_NAME = userName
+            ext.GITHUB_USER_KEY = userKey
+            credentials {
+                username = userName
+                password = userKey
+            }
+        }
+    }
+}
+
 plugins {
     id 'com.android.application' version '7.1.2' apply false
     id 'com.android.library' version '7.1.2' apply false
