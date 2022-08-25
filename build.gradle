@@ -4,15 +4,15 @@ buildscript {
         maven {
             url = uri("https://maven.pkg.github.com/imtianx/wallet-sdk-android")
             Properties properties = new Properties()
-            properties.load(project.rootProject.file('local.properties').newDataInputStream())
-            def userName = properties.getProperty("gpr.user")
-            def userKey = properties.getProperty("gpr.key")
-            ext.GITHUB_USER_NAME = userName
-            ext.GITHUB_USER_KEY = userKey
-            credentials {
-                username = userName
-                password = userKey
+            File file = project.rootProject.file('local.properties')
+            if (file != null && file.exists()) {
+                properties.load(project.rootProject.file('local.properties').newDataInputStream())
+                credentials {
+                    username = properties.getProperty("gpr.user")
+                    password = properties.getProperty("gpr.key")
+                }
             }
+
         }
     }
 }
