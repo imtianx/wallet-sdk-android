@@ -5,7 +5,7 @@ plugins {
 }
 
 def getVersionName = { ->
-    return getCurrentTime()
+    return getGitTagName() ?: getGitShortSHA() ?: getCurrentTime()
 }
 
 android {
@@ -33,6 +33,10 @@ static def getCurrentTime() {
 
 static def getGitShortSHA() {
     return 'git rev-parse --short HEAD'.execute().text.trim()
+}
+
+static def getGitTagName() {
+    return 'git describe --tags'.execute().text.trim()
 }
 
 dependencies {
