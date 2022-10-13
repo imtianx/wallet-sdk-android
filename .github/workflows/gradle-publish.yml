@@ -4,10 +4,8 @@ name: Publish package CI
 on:
   push:
     branches:
-      - release
-    tags:
-      - v*     
-    
+      - main
+
 jobs:
   publish:
     runs-on: ubuntu-latest
