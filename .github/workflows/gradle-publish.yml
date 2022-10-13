@@ -8,9 +8,6 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    env:
-      GITHUB_USER: ${{ github.actor }}
-      GITHUB_TOKEN: ${{ secrets.S_GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v3
       - name: Set up Java
